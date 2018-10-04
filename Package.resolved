@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CommandLine",
+        "repositoryURL": "https://github.com/vpopovyc/CommandLine.git",
+        "state": {
+          "branch": null,
+          "revision": "07940b5e9c4281dc46c96d704bb4c657bfcccd43",
+          "version": "4.2.5"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

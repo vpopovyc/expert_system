@@ -6,7 +6,7 @@
 #    By: vpopovyc <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/24 11:09:44 by vpopovyc          #+#    #+#              #
-#    Updated: 2018/09/24 11:09:49 by vpopovyc         ###   ########.fr        #
+#    Updated: 2018/10/04 19:53:58 by vpopovyc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,3 +21,6 @@ fclean: clean
 	rm -rf expert_system
 
 re: fclean all
+
+xc:
+	swift package generate-xcodeproj 
