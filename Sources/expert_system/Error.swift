@@ -11,6 +11,9 @@ enum ESError: Error {
     case invalidNumberOfCLIArguments
     case fileDoesNotExist
     case fileCantBeRead
+    case fileIsEmpty
+    case syntaxError
+    case expressionIsNotValid
 }
 
 extension ESError: CustomStringConvertible {
@@ -22,6 +25,12 @@ extension ESError: CustomStringConvertible {
             return "File does not exist"
         case .fileCantBeRead:
             return "File is not readable"
+        case .fileIsEmpty:
+            return "File is empty"
+        case .syntaxError:
+            return "Syntax error" // Add location of it
+        case .expressionIsNotValid:
+            return "Not valid expression: (facts: \"A+B+P\", op: \"=>\", conclusion: \"C+D\")"
         }
     }
 }

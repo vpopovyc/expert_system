@@ -1,0 +1,10 @@
+# comment
+         # comment with leading spaces
+#A# just fact
+#
+#A  # fact with trailing spaces
+#  A# fact with leading spaces
+#  A  # fact with spaces around 
+#
+ !A + B + !P =>  F # comment
+A+B + P => L + R # comment

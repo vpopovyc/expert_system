@@ -19,6 +19,15 @@ class Lexer: NSObject {
     
     public func create_lexemes() throws {
         
+        guard m_fileContent.isEmpty == false else {
+            throw ESError.fileIsEmpty
+        }
+        
+        let lines = m_fileContent.split(separator: "\n").map { String($0) }
+        
+        lines.forEach { (line) in
+            create_lexemes(from: line)
+        }
     }
 }
 
@@ -43,4 +52,5 @@ extension Lexer {
         return expandedPath
     }
 }
+
 
