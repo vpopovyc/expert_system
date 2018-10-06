@@ -11,3 +11,5 @@ public func terminate_me_plz(_ error: String = "") {
     fputs(error+"\n", stderr)
     exit(EXIT_FAILURE)
 }
+
+

@@ -6,5 +6,5 @@
 #  A# fact with leading spaces
 #  A  # fact with spaces around 
 #
- !A + B + !P =>  F # comment
-A+B + P => L + R # comment
+# !A + B + !P =>  F + # comment
+C | D+ (A) ^ A  + B  => L + R # comment
