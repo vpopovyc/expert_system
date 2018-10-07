@@ -62,7 +62,7 @@ extension Lexer {
         // Lexeme generator ahead
         
         var ops = Deque<Character>()
-        var polish_notated_facts = Deque<Character>()
+        var polish_notated_facts = ""
         
         let operators: [Character] = ["!", "+", "|", "^"]
         
@@ -85,7 +85,7 @@ extension Lexer {
                 fact_semaphore -= 1
                 
                 if let prev_op = ops.peekBack(), op_priority[token]! < op_priority[prev_op]! {
-                    polish_notated_facts.enqueue(prev_op)
+                    polish_notated_facts.append(prev_op)
                     ops.dropLast()
                 }
                 ops.enqueue(token)
@@ -107,7 +107,7 @@ extension Lexer {
                         if op == "(" {
                             break
                         } else {
-                            polish_notated_facts.enqueue(op)
+                            polish_notated_facts.append(op)
                         }
                     }
                 }
@@ -120,7 +120,7 @@ extension Lexer {
                 fact_semaphore += 1
                 op_semaphore = 0
                 
-                polish_notated_facts.enqueue(token)
+                polish_notated_facts.append(token)
             }
         }
         
@@ -129,10 +129,33 @@ extension Lexer {
         }
         
         while let op = ops.dequeueBack() {
-            polish_notated_facts.enqueue(op)
+            polish_notated_facts.append(op)
         }
         
         print(polish_notated_facts)
-        // generate_lexemes(polish_notated_facts)
+        generate_lexemes(&polish_notated_facts)
+    }
+    
+    private func generate_lexemes(_ facts: inout String) {
+        
+        print(find_two_facts(&facts))
+        print(facts)
+    }
+    
+    private func find_two_facts(_ facts: inout String) -> String {
+        let operators: [Character] = ["!", "+", "|", "^"]
+        
+        if let res = facts.firstIndex(where: { operators.contains($0) }) {
+            let prev_index = facts.index(before: res)
+            let prev_index_twice = facts.index(before: prev_index)
+            let sub_expression = facts[prev_index_twice...res]
+            // Generate new facts variable
+            // Add it to lexeme storage
+            // Win win
+            facts.replaceSubrange(prev_index_twice...res, with: "T")
+            return String(sub_expression)
+        }
+        
+        return ""
     }
 }

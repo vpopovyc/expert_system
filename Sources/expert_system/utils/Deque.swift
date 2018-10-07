@@ -90,6 +90,16 @@ public struct Deque<T> {
     public mutating func dropFirst() {
         let _ = self.dequeue()
     }
+    
+    public func find(_ predicate: (T?) -> Bool) -> (index: Int, value: T?) {
+        if let index = array.firstIndex(where: { element in predicate(element) }) {
+            return (index, array[index])
+        } else {
+            return (-1, nil)
+        }
+    }
+    
+    
 }
 
 extension Deque: CustomStringConvertible {
