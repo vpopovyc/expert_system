@@ -7,12 +7,15 @@
 
 import Foundation
 
-public enum Conditions {
-    case and
-    case then
+public enum Conditions: Character {
+    case and = "+"
+    case or = "|"
+    case xor = "^"
+    case then = ">"
+    case not = "!"
 }
 
 public enum Lexeme {
-    case fact(String, Bool)
+    case fact(Character, Bool)
     case condition(Conditions)
 }

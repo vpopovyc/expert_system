@@ -11,6 +11,8 @@ class Lexer: NSObject {
     
     private var m_fileContent: String = ""
     
+    public var m_lexemes: [Lexeme] = []
+    
     public func promt() throws {
         let filePath = try parseInput()
         

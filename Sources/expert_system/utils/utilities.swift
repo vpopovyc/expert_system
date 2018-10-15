@@ -7,7 +7,7 @@
 
 import Darwin
 
-public func terminate_me_plz(_ error: String = "") {
+public func terminate_me_plz(_ error: String = "") -> Never  {
     fputs(error+"\n", stderr)
     exit(EXIT_FAILURE)
 }
