@@ -17,6 +17,8 @@ enum ESError: Error {
     case bracketsError
     case factsSyntaxError
     case opSyntaxError
+    case silentEmptyLine
+    case internalInconsistency
 }
 
 extension ESError: CustomStringConvertible {
@@ -40,6 +42,10 @@ extension ESError: CustomStringConvertible {
             return "Invalid facts input"
         case .opSyntaxError:
             return "Invalid operators input"
+        case .silentEmptyLine:
+            return ""
+        case .internalInconsistency:
+            return "Internal inconsistency: terminating gracefully"
         }
     }
 }

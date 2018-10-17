@@ -17,3 +17,5 @@ do {
 } catch {
     terminate_me_plz("\(error)")
 }
+
+lexer.m_lexemes.forEach{print($0)}

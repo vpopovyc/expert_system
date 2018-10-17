@@ -1,10 +1,11 @@
-# comment
-         # comment with leading spaces
-#A# just fact
-#
-#A  # fact with trailing spaces
-#  A# fact with leading spaces
-#  A  # fact with spaces around 
-#
-!A | (!B | !P) =>  F  # comment
-#C | D+ (A) ^ A  + B  => L + R # comment
+B => A 
+D + E => B 
+G + H => F 
+I + J => G
+L + M => K 
+O + P => L + N 
+N => M
+
+?AFKP
+
+=DEIJOP

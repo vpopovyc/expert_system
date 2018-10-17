@@ -16,6 +16,8 @@ public enum Conditions: Character {
 }
 
 public enum Lexeme {
-    case fact(Character, Bool)
+    case fact(Character)
+    case fact_true(Character)
+    case fact_to_find(Character)
     case condition(Conditions)
 }
