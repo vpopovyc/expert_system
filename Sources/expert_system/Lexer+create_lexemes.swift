@@ -328,8 +328,8 @@ extension Lexer {
         }
         
         m_lexemes.append(contentsOf: [Lexeme.fact(f1),
-                                      Lexeme.condition(op_condition),
                                       Lexeme.fact(f2),
+                                      Lexeme.condition(op_condition),
                                       Lexeme.condition(imply_condition),
                                       Lexeme.fact(fact)])
     }

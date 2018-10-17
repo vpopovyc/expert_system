@@ -11,11 +11,18 @@ do {
 }
 
 
-//
+// Create lexemes
+// Make
 do {
     try lexer.create_lexemes()
 } catch {
     terminate_me_plz("\(error)")
 }
 
-lexer.m_lexemes.forEach{print($0)}
+let parser = Parser()
+
+do {
+    try parser.parse(lexemes: lexer.m_lexemes)
+} catch {
+    terminate_me_plz("\(error)")
+}
