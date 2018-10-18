@@ -26,7 +26,8 @@ class Node {
 
 class Relation {
     private static let op_tab: [Conditions : (Node, Node) -> Bool] = [
-        .and : { $0.state && $1.state }
+        .and : { $0.state && $1.state },
+        .then : { node_1, _ in node_1.state }
     ]
     
     // Relation defined by this nodes
@@ -46,6 +47,11 @@ class Relation {
         fact_2 = node_2
         fact_defined = target_node
         self.op_type = op_type
+    }
+    
+    convenience init(of node_1: Node, like op_type: Conditions, to target_node: Node) {
+        let fooNode = Node()
+        self.init(of: node_1, and: fooNode, like: op_type, to: target_node)
     }
 }
 

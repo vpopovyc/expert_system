@@ -64,7 +64,7 @@ class Parser {
                         throw ESError.expressionIsNotValid
                     }
                     
-                    print(symbol_1, conclusion_op, symbol_2)
+                    create_one_to_one_relation(symbol_1, conclusion_op, symbol_2)
                 }
             }
             
@@ -87,23 +87,24 @@ class Parser {
                     throw ESError.expressionIsNotValid
                 }
                 
-                print(not_condition, symbol_1, conclusion_op, symbol_2)
+                create_inversed_one_to_one_relation(not_condition, symbol_1, conclusion_op, symbol_2)
             }
-            
+            /* To do
             if case .fact_to_find(let symbol) = lexeme {
                 ()
-//                print(symbol)
+                print(symbol)
             }
             
             if case .fact_true(let symbol) = lexeme {
                 ()
-//                print(symbol)
+                print(symbol)
             }
-            
+            */
             i += 1
         }
     }
     
+    // Add good type check
     private func create_two_to_one_relation(_ symbol_1: Character,
                                             _ op_type: Conditions,
                                             _ symbol_2: Character,
@@ -114,8 +115,47 @@ class Parser {
         let node_3 = Node(named: symbol_3)
         
         let relation = Relation(of: node_1, and: node_2, like: op_type, to: node_3)
-        
         node_3.relations.append(relation)
-        print(relation, node_3)
+        
+        save(node: [node_1, node_2, node_3])
+    }
+    
+    private func create_one_to_one_relation(_ symbol_1: Character,
+                                            _ conclusion_op: Conditions,
+                                            _ symbol_2: Character) {
+        let node_1 = Node(named: symbol_1)
+        let node_2 = Node(named: symbol_2)
+        
+        let relation = Relation(of: node_1, like: conclusion_op, to: node_2)
+        node_2.relations.append(relation)
+        
+        save(node: [node_1, node_2])
+    }
+    
+    private func create_inversed_one_to_one_relation(_ not_condition: Conditions,
+                                                     _ symbol_1: Character,
+                                                     _ conclusion_op: Conditions,
+                                                     _ symbol_2: Character) {
+        let node_1 = Node(named: symbol_1)
+        let node_2 = Node(named: symbol_2)
+        
+        let relation = Relation(of: node_1, like: not_condition, to: node_2)
+        node_2.relations.append(relation)
+        
+        save(node: [node_1, node_2])
+    }
+    
+    private func save(node new_nodes: [Node]) {
+        new_nodes.forEach { new_node in
+            if facts_graph.contains(new_node) {
+                guard let old_node = facts_graph.remove(new_node) else {
+                    terminate_me_plz("Swift lib died :(")
+                }
+                
+                new_node.relations.forEach { old_node.relations.append($0) }
+            } else {
+                facts_graph.insert(new_node)
+            }
+        }
     }
 }
