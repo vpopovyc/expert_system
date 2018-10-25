@@ -115,7 +115,7 @@ extension Lexer {
         
         var polish_notated_imply_facts = ""
         try convert_to_polish_notation(conclusion_string, &polish_notated_imply_facts)
-        try generate_lexemes(&polish_notated_imply_facts)
+        try generate_lexemes(&polish_notated_imply_facts, reversed: true)
         
         guard polish_notated_facts.count == 1 && polish_notated_imply_facts.count == 1 else {
             throw ESError.internalInconsistency
@@ -226,7 +226,7 @@ extension Lexer {
         }
     }
     
-    private func generate_lexemes(_ facts: inout String, shrinkAsMuchAsPosible: Bool = true) throws {
+    private func generate_lexemes(_ facts: inout String, shrinkAsMuchAsPosible: Bool = true, reversed: Bool = false) throws {
         
         var startCount = facts.count
         repeat {
@@ -237,7 +237,7 @@ extension Lexer {
         
         let lowBound = shrinkAsMuchAsPosible ? 1 : 3
         while (facts.count > lowBound) {
-            try find_and_replace_two_facts(&facts)
+            try find_and_replace_two_facts(&facts, reversed: reversed)
         }
     }
     
@@ -253,7 +253,7 @@ extension Lexer {
         }
     }
     
-    private func find_and_replace_two_facts(_ facts: inout String) throws {
+    private func find_and_replace_two_facts_impl(_ facts: inout String) throws {
         let operators: [Character] = ["+", "|", "^"]
         
         if let res = facts.firstIndex(where: { operators.contains($0) }) {
@@ -266,6 +266,33 @@ extension Lexer {
             try store_two_facts(sub_expression, implyOn: hidden_identifier)
             
             facts.replaceSubrange(prev_index_twice...res, with: "\(hidden_identifier)")
+        }
+    }
+    
+    private func find_and_replace_two_facts_reversed_impl(_ facts: inout String) throws {
+        let operators: [Character] = ["+", "|", "^"]
+        
+        if let res = facts.firstIndex(where: { operators.contains($0) }) {
+            let prev_index = facts.index(before: res)
+            let prev_index_twice = facts.index(before: prev_index)
+            
+            let f1 = facts[prev_index]
+            let f2 = facts[prev_index_twice]
+            let hidden_identifier = new_identifier()
+            
+            try store_two_direct_facts(hidden_identifier, implyOn: f1)
+            try store_two_direct_facts(hidden_identifier, implyOn: f2)
+            
+            facts.replaceSubrange(prev_index_twice...res, with: "\(hidden_identifier)")
+        }
+        
+    }
+    
+    private func find_and_replace_two_facts(_ facts: inout String, reversed: Bool) throws {
+        if reversed {
+            try find_and_replace_two_facts_reversed_impl(&facts)
+        } else {
+            try find_and_replace_two_facts_impl(&facts)
         }
     }
     

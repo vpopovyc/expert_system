@@ -1,12 +1,17 @@
-B => A 
-D + E => B 
-G + H => F 
-I + J => G
-L + M => K 
-O + P => L + N 
-N => M
-!C => T
+A + C => B + F
 
-?AFKP
+=C
 
-=DEIJOP
+?FB
+ 
+#D + E => B 
+#G + H => F 
+#I + J => G
+#L + M => K 
+#O + P => L + N 
+#N => M
+#!C => T
+
+#=DEIJOP
+
+#?AFKP

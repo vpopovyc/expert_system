@@ -19,6 +19,8 @@ enum ESError: Error {
     case opSyntaxError
     case silentEmptyLine
     case internalInconsistency
+    case unknownInitialFacts
+    case unknownGoalQuery
 }
 
 extension ESError: CustomStringConvertible {
@@ -46,6 +48,10 @@ extension ESError: CustomStringConvertible {
             return ""
         case .internalInconsistency:
             return "Internal inconsistency: terminating gracefully"
+        case .unknownInitialFacts:
+            return "Unknown initial fact"
+        case .unknownGoalQuery:
+            return "Unknown goal query"
         }
     }
 }

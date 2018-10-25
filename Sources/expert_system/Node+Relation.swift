@@ -9,11 +9,15 @@ import Foundation
 
 class Node {
     
-    private let symbol: Character
+    public let symbol: Character
     
     public var state: Bool = false
     
     var relations: [Relation] = []
+    
+    var resolve: Bool {
+        return relations.reduce(into: state) { if $0 == false { $0 = $1.resolve } }
+    }
     
     init(named aName: Character) {
         symbol = aName
@@ -31,8 +35,8 @@ class Relation {
     ]
     
     // Relation defined by this nodes
-    let fact_1: Node
-    let fact_2: Node
+    var fact_1: Node
+    var fact_2: Node
     // Relation apply this op to nodes
     let op_type: Conditions
     var resolve: Bool {

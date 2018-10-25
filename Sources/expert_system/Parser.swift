@@ -9,10 +9,13 @@ import Foundation
 
 class Parser {
     
-    private var facts_graph: Set<Node>
+    public var facts_graph: Set<Node>
+    
+    public var goals: Set<Node>
     
     init() {
         facts_graph = []
+        goals = []
     }
     
     func parse(lexemes: [Lexeme]) throws {
@@ -89,17 +92,15 @@ class Parser {
                 
                 create_inversed_one_to_one_relation(not_condition, symbol_1, conclusion_op, symbol_2)
             }
-            /* To do
+            
             if case .fact_to_find(let symbol) = lexeme {
-                ()
-                print(symbol)
+                try add_to_goals_node(named: symbol)
             }
             
             if case .fact_true(let symbol) = lexeme {
-                ()
-                print(symbol)
+                try turn_on_node(named: symbol)
             }
-            */
+            
             i += 1
         }
     }
@@ -110,52 +111,84 @@ class Parser {
                                             _ symbol_2: Character,
                                             _ conclusion_op: Conditions,
                                             _ symbol_3: Character) {
-        let node_1 = Node(named: symbol_1)
-        let node_2 = Node(named: symbol_2)
-        let node_3 = Node(named: symbol_3)
+        let node_1 = find_node(named: symbol_1)
+        let node_2 = find_node(named: symbol_2)
+        let node_3 = find_node(named: symbol_3)
         
         let relation = Relation(of: node_1, and: node_2, like: op_type, to: node_3)
         node_3.relations.append(relation)
         
-        save(node: [node_1, node_2, node_3])
+        print("\(#function) \(symbol_1), \(symbol_2) to \(symbol_3)")
     }
     
     private func create_one_to_one_relation(_ symbol_1: Character,
                                             _ conclusion_op: Conditions,
                                             _ symbol_2: Character) {
-        let node_1 = Node(named: symbol_1)
-        let node_2 = Node(named: symbol_2)
+        let node_1 = find_node(named: symbol_1)
+        let node_2 = find_node(named: symbol_2)
         
         let relation = Relation(of: node_1, like: conclusion_op, to: node_2)
         node_2.relations.append(relation)
         
-        save(node: [node_1, node_2])
+        print("\(#function) \(symbol_1) to \(symbol_2)")
     }
     
     private func create_inversed_one_to_one_relation(_ not_condition: Conditions,
                                                      _ symbol_1: Character,
                                                      _ conclusion_op: Conditions,
                                                      _ symbol_2: Character) {
-        let node_1 = Node(named: symbol_1)
-        let node_2 = Node(named: symbol_2)
+        let node_1 = find_node(named: symbol_1)
+        let node_2 = find_node(named: symbol_2)
         
         let relation = Relation(of: node_1, like: not_condition, to: node_2)
         node_2.relations.append(relation)
-        
-        save(node: [node_1, node_2])
     }
     
-    private func save(node new_nodes: [Node]) {
-        new_nodes.forEach { new_node in
-            if facts_graph.contains(new_node) {
-                guard let old_node = facts_graph.remove(new_node) else {
-                    terminate_me_plz("Swift lib died :(")
-                }
-                
-                new_node.relations.forEach { old_node.relations.append($0) }
-            } else {
-                facts_graph.insert(new_node)
+    private func turn_on_node(named name: Character) throws {
+        let node = Node(named: name)
+        
+        if facts_graph.contains(node) {
+            guard let old_node = facts_graph.remove(node) else {
+                terminate_me_plz("Swift lib died :(")
             }
+            
+            old_node.state.toggle()
+            
+            facts_graph.insert(old_node)
+        } else {
+            throw ESError.unknownInitialFacts
+        }
+    }
+    
+    private func add_to_goals_node(named name: Character) throws {
+        let node = Node(named: name)
+        
+        if facts_graph.contains(node) {
+            guard let old_node = facts_graph.remove(node) else {
+                terminate_me_plz("Swift lib died :(")
+            }
+            
+            facts_graph.insert(old_node)
+            goals.insert(old_node)
+        } else {
+            throw ESError.unknownGoalQuery
+        }
+    }
+    
+    private func find_node(named name: Character) -> Node {
+        let new_node = Node(named: name)
+        
+        if facts_graph.contains(new_node) {
+            // Accuire node reference
+            guard let found_node = facts_graph.remove(new_node) else {
+                terminate_me_plz("Swift lib died :(")
+            }
+            // And place it back
+            facts_graph.insert(found_node)
+            return found_node
+        } else {
+            facts_graph.insert(new_node)
+            return new_node
         }
     }
 }
