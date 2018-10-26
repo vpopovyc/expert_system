@@ -31,7 +31,8 @@ class Node {
 class Relation {
     private static let op_tab: [Conditions : (Node, Node) -> Bool] = [
         .and : { $0.state && $1.state },
-        .then : { node_1, _ in node_1.state }
+        .then : { node_1, _ in node_1.state },
+        .not : { node_1, _ in !node_1.state }
     ]
     
     // Relation defined by this nodes
@@ -66,5 +67,11 @@ extension Node: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(symbol)
+    }
+}
+
+extension Relation {
+    var is_direct: Bool {
+        return [Conditions.then, Conditions.not].contains(self.op_type)
     }
 }
