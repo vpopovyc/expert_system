@@ -32,7 +32,9 @@ class Relation {
     private static let op_tab: [Conditions : (Node, Node) -> Bool] = [
         .and : { $0.state && $1.state },
         .then : { node_1, _ in node_1.state },
-        .not : { node_1, _ in !node_1.state }
+        .not : { node_1, _ in !node_1.state },
+        .or : { $0.state || $1.state },
+        .xor : { $0.state != $1.state }
     ]
     
     // Relation defined by this nodes
@@ -60,13 +62,18 @@ class Relation {
     }
 }
 
-extension Node: Hashable {
-    static func == (lhs: Node, rhs: Node) -> Bool {
-        return lhs.symbol == rhs.symbol
-    }
-    
+extension Node: Hashable, Equatable {
+#if swift(>=4.2)
     func hash(into hasher: inout Hasher) {
         hasher.combine(symbol)
+    }
+#else
+    var hashValue: Int {
+        return symbol.hashValue
+    }
+#endif
+    static func == (lhs: Node, rhs: Node) -> Bool {
+        return lhs.symbol == rhs.symbol
     }
 }
 
